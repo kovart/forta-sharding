@@ -29,26 +29,20 @@ const sharding = new BotSharding({
 });
 ```
 
-The following example shows how custom sharding can be implemented:
+The following example shows how sharding can be implemented using the library:
 
 ```ts
-const initialize: Initialize = async () => {
-  const provider = getEthersProvider();
-  const network = await provider.getNetwork();
-  await sharding.sync(network.chainId);
-};
-
 const handleTransaction: HandleTransaction = async (txEvent: TransactionEvent) => {
   const findings: Finding[] = [];
 
-  if (txEvent.blockNumber % 100 === 0) {
+  if (!sharding.isSynced || txEvent.blockNumber % 100 === 0) {
     await sharding.sync(txEvent.network);
   }
   
-  // Do some non-sharded logic here
+  // Non-sharded logic...
 
   if (txEvent.blockNumber % sharding.getShardCount() !== sharding.getShardIndex()) return findings;
 
-  // Your sharded logic is here...
+  // Sharded logic...
 };
 ```

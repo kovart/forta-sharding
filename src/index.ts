@@ -62,7 +62,7 @@ class BotSharding {
     const token = await fetchJwt({});
     const { payload } = decodeJwt(token);
     const botId = payload['bot-id'];
-    const scanner = payload.sub;
+    const scanner = payload.sub.toLowerCase();
 
     this.botInfo = { botId, scanner };
 
@@ -85,7 +85,9 @@ class BotSharding {
               this.dispatch.scannerAt(botInfo.botId, i, { blockTag }),
             ) as Promise<BigNumber>,
         ),
-      ).then((scanners) => scanners.map((v) => ethers.utils.hexZeroPad(v.toHexString(), 20)));
+      ).then((scanners) =>
+        scanners.map((v) => ethers.utils.hexZeroPad(v.toHexString(), 20).toLowerCase()),
+      );
       scanners.push(...result);
     }
 
@@ -128,7 +130,8 @@ class BotSharding {
     let shardCount = Math.max(1, scanners.length);
     let shardIndex = Math.max(
       0,
-      scanners.findIndex((scanner) => scanner === botInfo.scanner),
+      scanners
+        .findIndex((scanner) => scanner === botInfo.scanner.toLowerCase()),
     );
 
     this.shardInfo = {
@@ -148,6 +151,16 @@ class BotSharding {
     if (!this.shardInfo) throw new Error('sync() has not been executed');
 
     return this.shardInfo.shardCount;
+  }
+
+  public getScannerCount() {
+    if (!this.shardInfo) throw new Error('sync() has not been executed');
+
+    return this.shardInfo.scannerCount;
+  }
+
+  public get isSynced(): boolean {
+    return !!this.shardInfo;
   }
 }
 

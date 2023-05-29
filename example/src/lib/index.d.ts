@@ -20,6 +20,8 @@ declare class BotSharding {
     sync(chainId: number): Promise<void>;
     getShardIndex(): number;
     getShardCount(): number;
+    getScannerCount(): number;
+    get isSynced(): boolean;
 }
 export { BotSharding };
 //# sourceMappingURL=index.d.ts.map

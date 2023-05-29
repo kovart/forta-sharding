@@ -38,7 +38,7 @@ class BotSharding {
             const token = yield (0, forta_agent_1.fetchJwt)({});
             const { payload } = (0, forta_agent_1.decodeJwt)(token);
             const botId = payload['bot-id'];
-            const scanner = payload.sub;
+            const scanner = payload.sub.toLowerCase();
             this.botInfo = { botId, scanner };
             return this.botInfo;
         });
@@ -51,7 +51,7 @@ class BotSharding {
             });
             const scanners = [];
             for (const batch of (0, lodash_1.chunk)((0, lodash_1.range)(scannerCount.toNumber()), this.concurrency)) {
-                const result = yield Promise.all(batch.map((i) => (0, utils_1.retry)(() => this.dispatch.scannerAt(botInfo.botId, i, { blockTag })))).then((scanners) => scanners.map((v) => ethers_1.ethers.utils.hexZeroPad(v.toHexString(), 20)));
+                const result = yield Promise.all(batch.map((i) => (0, utils_1.retry)(() => this.dispatch.scannerAt(botInfo.botId, i, { blockTag })))).then((scanners) => scanners.map((v) => ethers_1.ethers.utils.hexZeroPad(v.toHexString(), 20).toLowerCase()));
                 scanners.push(...result);
             }
             const chainIds = [];
@@ -79,7 +79,8 @@ class BotSharding {
             const scannersByChainId = yield this.getScanners('latest');
             const scanners = scannersByChainId[chainId] || [];
             let shardCount = Math.max(1, scanners.length);
-            let shardIndex = Math.max(0, scanners.findIndex((scanner) => scanner === botInfo.scanner));
+            let shardIndex = Math.max(0, scanners
+                .findIndex((scanner) => scanner === botInfo.scanner.toLowerCase()));
             this.shardInfo = {
                 shardIndex: Math.floor(shardIndex / this.redundancy),
                 shardCount: Math.max(1, Math.ceil(shardCount / this.redundancy)),
@@ -96,6 +97,14 @@ class BotSharding {
         if (!this.shardInfo)
             throw new Error('sync() has not been executed');
         return this.shardInfo.shardCount;
+    }
+    getScannerCount() {
+        if (!this.shardInfo)
+            throw new Error('sync() has not been executed');
+        return this.shardInfo.scannerCount;
+    }
+    get isSynced() {
+        return !!this.shardInfo;
     }
 }
 exports.BotSharding = BotSharding;
