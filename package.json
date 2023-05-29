@@ -1,0 +1,45 @@
+{
+  "name": "forta-sharding",
+  "version": "1.0.0",
+  "description": "Helper library for effortless implementation of custom sharding logic in Forta bots",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kovart/forta-sharding.git"
+  },
+  "scripts": {
+    "build": "tsc && tsc --outDir ./example/src/lib",
+    "prepublish": "npm run build",
+    "example": "npm run build && cd ./example && npm run start"
+  },
+  "keywords": [
+    "forta",
+    "sharding"
+  ],
+  "author": "Artem Kovalchuk",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.1",
+    "@types/lodash": "^4.14.195",
+    "eslint": "^8.41.0",
+    "jest": "^29.5.0",
+    "prettier": "^2.8.8",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
+    "forta-agent-tools": "^3.2.7"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2",
+    "forta-agent": "^0.1.32",
+    "lodash": "^4.17.21"
+  },
+  "bugs": {
+    "url": "https://github.com/kovart/forta-sharding/issues"
+  },
+  "homepage": "https://github.com/kovart/forta-sharding#readme",
+  "directories": {
+    "example": "example"
+  }
+}

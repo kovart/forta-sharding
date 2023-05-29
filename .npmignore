@@ -1,0 +1,9 @@
+.idea
+.vscode
+
+
+/example
+jest.config.js
+*.spec.*
+.eslinterc.js
+.prettierrc
