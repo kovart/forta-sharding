@@ -4,6 +4,12 @@
 
 Helper library for effortless implementation of custom sharding logic in Forta bots.
 
+## Installation
+
+```bash
+$ npm install forta-sharding
+```
+
 ### Usage
 An example project of how to use the library can be found [here](./example).
 
@@ -23,6 +29,8 @@ To specify the number of duplicate scanners, you need to specify the `redundancy
 For example, with 6 scanners, specifying `redundancy` as 2 would create 3 shards.
 
 ```ts
+import { BotSharding } from 'bot-sharding'; 
+
 const sharding = new BotSharding({
   redundancy: 2,
   isDevelopment: process.env.NODE_ENV !== 'production',
